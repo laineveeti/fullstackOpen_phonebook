@@ -1,8 +1,10 @@
-const { response, json } = require('express');
+const morgan = require('morgan');
 const express = require('express');
 const app = express();
 
 app.use(express.json());
+morgan.token('data', (req, res) => req.method === 'POST' ? JSON.stringify(req.body) : '');
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'));
 
 let contacts = [
     {
@@ -29,26 +31,22 @@ let contacts = [
 
 app.get('/info', (req, res) => {
     const info = `Phonebook has info for ${contacts.length} people<br>${new Date()}`
-    console.log(info);
     res.send(info);
 });
 
 app.get('/api/persons', (req, res) => {
-    console.log("sending all contacts");
     res.json(contacts);
 });
 
 app.get('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id);
     const contact = contacts.find(contact => contact.id === id);
-    console.log('sending resource: ', contact);
     contact ? res.json(contact) : res.status(404).send();
 });
 
 app.delete('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id);
     contacts = contacts.filter(contact => contact.id !== id);
-    console.log('deleted resource: ', id);
     res.status(204).end();
 });
 
@@ -74,9 +72,14 @@ app.post('/api/persons', (req, res) => {
     };
 
     contacts = contacts.concat(newContact);
-    console.log('created person: ', newContact);
     res.json(newContact);
 });
+
+const unknownEndpoint = (request, response) => {
+    response.status(404).send({ error: 'unknown endpoint' });
+};
+  
+app.use(unknownEndpoint);
 
 const PORT = 3001;
 app.listen(PORT, () => {
