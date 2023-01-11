@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 
 app.use(express.json());
+app.use(express.static('react/build'));
 morgan.token('data', (req, res) => req.method === 'POST' ? JSON.stringify(req.body) : '');
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'));
 
@@ -81,7 +82,7 @@ const unknownEndpoint = (request, response) => {
   
 app.use(unknownEndpoint);
 
-const PORT = 3001;
+const PORT = Number(process.env.PORT) || 3001;
 app.listen(PORT, () => {
-    console.log('listening on port ', PORT);
+  console.log(`Server running on port ${PORT}`)
 });
