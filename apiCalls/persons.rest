@@ -1,28 +1,28 @@
-GET http://localhost:3001/api/persons
-
+GET http://localhost:8080/api/persons
 ###
-
-GET http://localhost:3001/api/persons/1
-
+GET http://localhost:8080/api/persons/63c45dd8e20fb0ebe6905d00
 ###
-
-DELETE http://localhost:3001/api/persons/1
-
+DELETE http://localhost:8080/api/persons/63c46664783a6f687582b930
 ###
-
-POST http://localhost:3001/api/persons
+POST http://localhost:8080/api/persons
 Content-Type: application/json
 
 {
     "name": "totally real person",
     "number": "500-500-500"
 }
-
 ###
-
-POST http://localhost:3001/api/persons
+POST http://localhost:8080/api/persons
 Content-Type: application/json
 
 {
     "name": "not real person"
+}
+###
+PUT http://localhost:8080/api/persons/63c45dd8e20fb0ebe6905d00
+Content-Type: application/json
+
+{
+    "name": "abc",
+    "number": "1111"
 }
