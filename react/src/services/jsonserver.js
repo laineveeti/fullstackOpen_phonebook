@@ -10,4 +10,5 @@ const remove = (id) => axios.delete(baseUrl + id).then(response => response.data
 
 const update = (id, object) => axios.put(baseUrl + id, object).then(response => response.data);
 
-export default {create, getAll, remove, update};
+const exp = {create, getAll, remove, update};
+export default exp;

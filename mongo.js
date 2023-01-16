@@ -12,7 +12,7 @@ mongoose.connect(url);
 const contactSchema = mongoose.Schema({
     name: String,
     number: String
-})
+});
 
 const Contact = mongoose.model('Contact', contactSchema);
 
@@ -22,7 +22,7 @@ if(process.argv.length === 3) {
             console.log(contact);
         });
         mongoose.connection.close();
-    })
+    });
 }
 if(process.argv.length === 5) {
     const newName = process.argv[3];
@@ -30,9 +30,9 @@ if(process.argv.length === 5) {
     const newContact = Contact({
         name: newName,
         number: newNumber
-    })
+    });
     newContact.save().then(() => {
-        console.log(`added ${newName} number ${newNumber} to phonebook`)
+        console.log(`added ${newName} number ${newNumber} to phonebook`);
         mongoose.connection.close();
-    })
+    });
 }

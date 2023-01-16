@@ -30,15 +30,16 @@ const App = () => {
                         setMsg(`Replaced ${updatedContact.name}'s number with ${updatedContact.number}`);
                         setSuccess(true);
                         setTimeout(() => setMsg(null), 5000);
+                        setPersons(persons.map(contact => contact.id === updatedContact.id ? updatedContact : contact));
                     })
-                    .catch(() => {
-                        setMsg(`Information of ${existingContact.name} has already been removed from server`);
+                    .catch(error => {
+                        const msg = error.response.data.error;
                         setSuccess(false);
+                        setMsg(msg);
                         setTimeout(() => setMsg(null), 5000);
-                        setPersons(persons.filter(person => person.id !== existingContact.id));
+                        console.log(msg);
                     });
-                setPersons(persons.map(contact => contact.id === updatedContact.id ? updatedContact : contact));
-            
+
                 setNewName('');
                 setNewNumber('');
             }
@@ -46,11 +47,18 @@ const App = () => {
         } else {
             const newPerson = { name: newName, number: newNumber };
             phonebookServer.create(newPerson)
-                .then(data => {
-                    setMsg(`Added ${data.name}`);
+                .then(createdPerson => {
+                    setMsg(`Added ${createdPerson.name}`);
                     setSuccess(true);
                     setTimeout(() => setMsg(null), 5000);
-                    setPersons(persons.concat(data));
+                    setPersons(persons.concat(createdPerson));
+                })
+                .catch(error => {
+                    const msg = error.response.data.error;
+                    setSuccess(false);
+                    setMsg(msg);
+                    setTimeout(() => setMsg(null), 5000);
+                    console.log(msg);
                 });
     
             setNewName('');
